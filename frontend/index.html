@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Darsha Store</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ⭐ NEW AMAZON-STYLE NAVBAR ⭐ -->
+
+  <header class="navbar">
+
+  <a href="index.html" class="logo-link">
+    <img src="images/logo.jpg" class="logo-img" alt="Darsha Store Logo">
+  </a>
+
+  <div class="location-box" onclick="getLocation()">
+      <span class="loc-icon">📍</span>
+      <span id="locationText">update </span>
+  </div>
+
+    
+
+    <div class="nav-center">
+      <select class="all-select">
+        <option>All</option>
+      </select>
+      <input type="text" class="search-box" placeholder="Search products..." />
+      <button class="search-btn" onclick="searchProducts()">🔍</button>
+    </div>
+
+    <div class="nav-right">
+      <a href="signin.html" class="account" style="text-decoration:none;color:white;">
+        <span class="small">Hello, sign in</span>
+        <span class="bold">Account & Lists</span>
+      </a>
+    </div>
+
+    <div class="orders">
+      <span class="small">Returns</span>
+      <span class="bold">& Orders</span>
+    </div>
+
+    <a href="cart.html" class="cart-link">🛒 Cart (<span id="cartCount">0</span>)</a>
+
+  </header>
+
+  <nav class="category-bar">
+  <a href="category.html?cat=fresh">Fresh</a>
+  <a href="category.html?cat=sell">Sell</a>
+  <a href="category.html?cat=best">Best Sellers</a>
+  <a href="category.html?cat=mobiles">Mobiles</a>
+  <a href="category.html?cat=deals">Today's Deals</a>
+  <a href="category.html?cat=service">Customer Service</a>
+  <a href="category.html?cat=new">New Releases</a>
+  <a href="category.html?cat=electronics">Electronics</a>
+  
+</nav>
+
+  <!-- 🎯 PROMOTIONAL BANNER -->
+  <section class="promo-banner">
+    <img src="images/banner.jpg" alt="Budget Store Banner" />
+    <img src="images/banner2.png" alt="Budget store Banner"/>
+    <img src="images/banner3.png" alt="Budget store Banner"/>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <div id="productList" class="grid"></div>
+  </main>
+
+  <!-- ================= AMAZON STYLE FOOTER ================= -->
+  <footer class="footer">
+
+    <div class="footer-back">
+      <a href="#">Back to top</a>
+    </div>
+
+    <div class="footer-links">
+
+      <div class="footer-column">
+        <h3>Get to Know Us</h3>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Press Releases</a>
+        <a href="#">Darsha Science</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>Connect with Us</h3>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <a href="#">Instagram</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>Make Money with Us</h3>
+        <a href="#">Sell on Darsha Store</a>
+        <a href="#">Advertise Your Products</a>
+        <a href="#">Become an Affiliate</a>
+        <a href="#">Build Your Brand</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>Let Us Help You</h3>
+        <a href="#">Your Account</a>
+        <a href="#">Returns Centre</a>
+        <a href="#">Help</a>
+        <a href="#">Customer Service</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <h2 class="footer-logo">Darsha Store</h2>
+    </div>
+
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    let bannerIndex = 0;
+    const banners = document.querySelectorAll(".promo-banner img");
+
+    function showBanner() {
+      banners.forEach(b => b.style.display = "none");
+      bannerIndex++;
+      if (bannerIndex > banners.length) bannerIndex = 1;
+      banners[bannerIndex - 1].style.display = "block";
+      setTimeout(showBanner, 3000);
+    }
+
+    showBanner();
+    loadProducts();
+    updateCartCount();
+    function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        document.getElementById("locationText").innerText = "Location not supported";
+    }
+}
+
+function showPosition(position) {
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude;
+
+    // Reverse geocode using free API
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            let city = data.address.city || data.address.town || data.address.village;
+            let postcode = data.address.postcode || "";
+            document.getElementById("locationText").innerText =
+                `Delivering to ${city} ${postcode}`;
+        })
+        .catch(() => {
+            document.getElementById("locationText").innerText = "Unable to fetch your location";
+        });
+}
+
+function showError(error) {
+    document.getElementById("locationText").innerText = "Location access denied";
+}
+
+// Auto run on page load
+getLocation();
+// ================= SEARCH WORKING 100% =================
+function searchProducts() {
+    let query = document.querySelector(".search-box").value.toLowerCase();
+
+    if (query.trim() === "") {
+        renderProducts(products); // show all products again
+        return;
+    }
+
+    let filtered = products.filter(p =>
+        p.name.toLowerCase().includes(query)
+    );
+
+    renderProducts(filtered);
+}
+
+// ================= ENTER SEARCH =================
+document.querySelector(".search-box").addEventListener("keyup", function(e) {
+    if (e.key === "Enter") {
+        searchProducts();
+    }
+});
+
+  </script>
+
+</body>
+</html>

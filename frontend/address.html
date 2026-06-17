@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delivery Address — Darsha Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="container small">
+    <h1>Enter Delivery Address</h1>
+
+    <div class="card" style="padding:20px;">
+      <label>Full Name</label>
+      <input id="fullName" class="input" type="text" placeholder="Enter your name" required>
+
+      <label>Mobile Number</label>
+      <input id="mobile" class="input" type="tel" maxlength="10" placeholder="Enter mobile number" required>
+
+
+      <label>Full Address</label>
+      <textarea id="address" class="input" placeholder="House No, Street, Area" required></textarea>
+
+      <label>Pincode</label>
+      <input id="pincode" class="input" type="tel" maxlength="6" placeholder="Enter pincode" required>
+
+      <button class="btn primary" onclick="saveAddress()">Confirm Address</button>
+    </div>
+  </main>
+
+  <script>
+    function saveAddress() {
+      const name = document.getElementById("fullName").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const pincode = document.getElementById("pincode").value.trim();
+
+      if (!name || !mobile || !address || !pincode) {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      if (mobile.length !== 10) {
+        alert("Enter a valid 10-digit mobile number!");
+        return;
+      }
+
+      const deliveryData = {
+        name,
+        mobile,
+        address,
+        pincode
+      };
+
+      localStorage.setItem("deliveryAddress", JSON.stringify(deliveryData));
+      window.location.href = "payment.html";
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loan / EMI — Darsha Store</title>
+  <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">Darsha Store</div>
+    <div class="actions">
+      <a class="btn" href="cart.html">Back to Cart</a>
+    </div>
+  </header>
+
+  <main class="container small">
+    <h1>Loan EMI Calculator</h1>
+
+    <label>Loan Amount (₹)</label>
+    <input id="amount" class="input" readonly>
+
+    <label>Select EMI Duration</label>
+    <select id="months" class="input">
+      <option value="">Select months</option>
+      <option value="3">3 Months (8% Interest)</option>
+      <option value="6">6 Months (10% Interest)</option>
+      <option value="9">9 Months (11% Interest)</option>
+      <option value="12">12 Months (12% Interest)</option>
+    </select>
+
+    <div class="control-row">
+      <button class="btn primary" onclick="calculateEMI()">Calculate EMI</button>
+      <button id="applyLoanBtn" class="btn" style="display:none" onclick="applyLoan()">Apply Loan & Pay</button>
+    </div>
+
+    <div id="resultBox" style="margin-top:16px;"></div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    // autofill amount from localStorage
+    window.addEventListener('load', function() {
+      const total = localStorage.getItem('loanAmount') || '';
+      document.getElementById('amount').value = total;
+    });
+
+    function getInterestRate(months) {
+      if (months == 3) return 8;
+      if (months == 6) return 10;
+      if (months == 9) return 11;
+      if (months == 12) return 12;
+      return 0;
+    }
+
+    function calculateEMI() {
+      const P = Number(document.getElementById('amount').value);
+      const N = Number(document.getElementById('months').value);
+
+      if (!P || !N) {
+        alert('Please select EMI duration and ensure amount is set.');
+        return;
+      }
+
+      const interestPercent = getInterestRate(N);
+      const R = interestPercent / 12 / 100;
+      const emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+      const totalPayment = emi * N;
+      const totalInterest = totalPayment - P;
+
+      document.getElementById('resultBox').innerHTML = `
+        <div class="card">
+          <h3>EMI Details</h3>
+          <div>Interest Rate: <strong>${interestPercent}% p.a.</strong></div>
+          <div>Monthly EMI: <strong>₹${emi.toFixed(2)}</strong></div>
+          <div>Total Interest: <strong>₹${totalInterest.toFixed(2)}</strong></div>
+          <div>Total Payable: <strong>₹${totalPayment.toFixed(2)}</strong></div>
+        </div>
+      `;
+
+      document.getElementById('applyLoanBtn').style.display = 'inline-block';
+    }
+
+    function applyLoan() {
+    // your loan code…
+
+    // AFTER loan is approved:
+    window.location.href = "address.html";
+}
+
+  </script>
+</body>
+</html>

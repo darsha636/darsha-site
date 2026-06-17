@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Details</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .desc { margin-top: 15px; font-size: 16px; }
+    .section { margin-top: 25px; }
+
+    .review-box {
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 4px solid orange;
+    }
+
+    /* ⭐ STAR STYLING */
+    .stars {
+      color: #ffb300;
+      font-size: 22px;
+      letter-spacing: 2px;
+      display: inline-block;
+      margin: 5px 0;
+    }
+
+    .product-stars {
+      font-size: 26px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <h2 class="logo">Darsha Store</h2>
+    <a href="cart.html" class="cart-link">Cart 🛒 (<span id="cartCount">0</span>)</a>
+  </header>
+
+  <button onclick="goBack()" class="back-btn">← Back</button>
+
+  <main class="container">
+    <div id="productDetails" class="card" style="padding:20px; min-height:200px;">
+      Loading product...
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+
+  <script>
+
+// ⭐ Generate star rating (filled + empty)
+function generateStars(rating) {
+  let stars = "";
+  for (let i = 1; i <= 5; i++) {
+    stars += i <= rating ? "★" : "☆";
+  }
+  return `<span class="stars">${stars}</span>`;
+}
+
+let currentProduct = null;
+
+// ---------------- LOAD PRODUCT DETAILS ----------------
+async function loadProductDetails() {
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if (!id) {
+    document.getElementById("productDetails").innerHTML = "<p>Product not found.</p>";
+    return;
+  }
+
+  const res = await fetch("http://localhost:9090/products");
+  const all = await res.json();
+
+  currentProduct = all.find(p => p.id == id);
+
+  if (!currentProduct) {
+    document.getElementById("productDetails").innerHTML = "<p>Product not found.</p>";
+    return;
+  }
+
+  // Default description if backend doesn't have one
+  const desc = currentProduct.description || "No description available.";
+
+  const reviews = currentProduct.reviews || [];
+
+  // ⭐ Create reviews HTML
+  let reviewsHTML = "";
+  if (reviews.length > 0) {
+    reviews.forEach(r => {
+      reviewsHTML += `
+       <div class="review-box">
+          <strong>${r.user}</strong> ${generateStars(r.rating)}
+          <br>${r.comment}
+        </div> 
+      `;
+    });
+  } else {
+    reviewsHTML = "<p>No reviews yet.</p>";
+  }
+
+  // ⭐ Main rating → average
+  const avgRating =
+    reviews.length > 0
+      ? Math.round(reviews.reduce((a,b)=>a + b.rating, 0) / reviews.length)
+      : 0;
+
+  // Render page
+  document.getElementById("productDetails").innerHTML = `
+    <img src="${currentProduct.image}" style="width:260px;border-radius:10px;margin-bottom:15px;" />
+
+    <h2>${currentProduct.name}</h2>
+
+    <div class="product-stars">
+      ${generateStars(avgRating)}
+    </div>
+
+    <p style="font-size:20px;font-weight:bold;">₹${currentProduct.price}</p>
+
+    <p class="desc">${desc}</p>
+
+    <button class="btn" onclick="addToCartFromDetails()">Add to Cart</button>
+
+    <div class="section">
+      <h3>Reviews</h3>
+      ${reviewsHTML}
+    </div>
+  `;
+}
+
+// ---------------- ADD TO CART FIX ----------------
+function addToCartFromDetails() {
+  addToCart(currentProduct);
+}
+
+loadProductDetails();
+</script>
+
+</body>
+</html>

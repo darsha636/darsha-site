@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment — Darsha Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<main class="container small">
+  <h1>Choose Payment Method</h1>
+
+  <div class="card" style="padding:20px;">
+    
+    <label><input type="radio" name="pay" value="upi"> UPI</label><br>
+    <label><input type="radio" name="pay" value="card"> Debit / Credit Card</label><br>
+    <label><input type="radio" name="pay" value="cod"> Cash On Delivery</label><br>
+
+    <button class="btn primary" onclick="makePayment()">Pay Now</button>
+
+  </div>
+</main>
+
+
+<script>
+function makePayment() {
+  const pay = document.querySelector("input[name='pay']:checked");
+
+  if (!pay) {
+    alert("Please select a payment method!");
+    return;
+  }
+
+  // Save payment info
+  localStorage.setItem("paymentMethod", pay.value);
+
+  // Go to thank you page
+  window.location.href = "thankyou.html";
+}
+</script>
+
+</body>
+</html>
+

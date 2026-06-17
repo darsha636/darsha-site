@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Details</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="navbar">
+    <h2 class="logo">Darsha Store</h2>
+    <a href="cart.html" class="cart-link">Cart 🛒 (<span id="cartCount">0</span>)</a>
+  </header>
+
+  <button onclick="goBack()" class="back-btn">← Back</button>
+
+  <main class="container">
+    <div id="productDetails" class="card" style="padding:20px; min-height:200px;">
+      Loading product...
+    </div>
+  </main>
+
+
+  <script src="script.js"></script>
+
+  <!-- ⭐ FIXED PRODUCT DETAILS SCRIPT ⭐ -->
+  <script>
+async function loadProductDetails() {
+
+  // 1️⃣ Get ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  console.log("Product ID:", id);
+
+  if (!id) {
+    document.getElementById("productDetails").innerHTML =
+      "<p>Product not found.</p>";
+    return;
+  }
+
+  // 2️⃣ Fetch all products
+  const res = await fetch("http://localhost:9090/products");
+  const allProducts = await res.json();
+
+  // 3️⃣ Find product by id
+  const product = allProducts.find(p => p.id == id);
+
+  if (!product) {
+    document.getElementById("productDetails").innerHTML =
+      "<p>Product not found.</p>";
+    return;
+  }
+
+  // 4️⃣ Show product details
+  document.getElementById("productDetails").innerHTML = `
+    <img src="${product.image}" style="width:260px;border-radius:10px;margin-bottom:15px;" />
+    <h2>${product.name}</h2>
+    <p style="font-size:20px;font-weight:bold;">₹${product.price}</p>
+
+    <button class="btn" onclick='addToCart(${JSON.stringify(product)})'>
+      Add to Cart
+    </button>
+  `;
+}
+
+loadProductDetails();
+</script>
+
+</body>
+</html>
+

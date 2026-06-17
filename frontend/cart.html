@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cart — Darsha Store</title>
+  <link href="style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="brand">Darsha Store</div>
+    <div class="actions">
+      <a class="btn" href="index.html">Back to Products</a>
+    </div>
+  </header>
+
+  <main class="container small">
+    <h1>Your Cart</h1>
+
+    <div id="cartItemsArea"></div>
+
+    <div class="summary">
+      <div>Total Amount: <strong>₹<span id="totalAmount">0</span></strong></div>
+      <div id="loanBox"></div>
+
+      <div class="control-row">
+        <button class="btn primary" id="checkout">Proceed</button>
+        <button class="btn ghost" id="clearCartBtn">Clear Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+<script>
+  // CONNECT BUTTON TO FUNCTION
+  document.getElementById("checkout").addEventListener("click", checkout);
+
+  function checkout() {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    let total = 0;
+    cart.forEach(item => {
+      total += Number(item.price);
+    });
+
+    if (total < 5000) {
+      window.location.href = "address.html";  // direct
+    } else {
+      window.location.href = "loan.html";      // loan first
+    }
+  }
+</script>
+</body>
+</html>
+

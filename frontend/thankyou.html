@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You — Darsha Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<main class="container small">
+  <h1>🎉 Thank You for Your Order!</h1>
+<h2>Your order has been placed!</h2>
+<p>Order ID: <strong id="orderId"></strong></p>
+
+  <a href="index.html" class="btn primary">Back to Home</a>
+</main>
+
+<script>
+  const orderId = "DAR" + Math.floor(100000 + Math.random() * 900000);
+  document.getElementById("orderId").innerText = orderId;
+
+  // Clear cart after order completed
+  localStorage.removeItem("cart");
+</script>
+
+
+</body>
+</html>
+

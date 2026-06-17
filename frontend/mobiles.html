@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mobiles - Darsha Store</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+    header {
+      background: #232f3e;
+      padding: 15px;
+      color: white;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .card img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+    }
+    .card h3 { margin: 10px 0; }
+    .card p { margin: 5px 0; color: #555; }
+    .btn {
+      background: #ff9900;
+      padding: 10px 15px;
+      display: inline-block;
+      border-radius: 5px;
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>Mobile Phones</header>
+
+<div class="products">
+
+  <div class="card">
+    <img src="img/mobile1.jpg" alt="Mobile 1" />
+    <h3>Samsung Galaxy A15</h3>
+    <p>8GB RAM | 128GB Storage</p>
+    <p>₹14,999</p>
+    <a class="btn" href="product-details.html?id=1">View Details</a>
+  </div>
+
+  <div class="card">
+    <img src="img/mobile2.jpg" alt="Mobile 2" />
+    <h3>iPhone 13</h3>
+    <p>128GB Storage</p>
+    <p>₹52,999</p>
+    <a class="btn" href="product-details.html?id=2">View Details</a>
+  </div>
+
+  <div class="card">
+    <img src="img/mobile3.jpg" alt="Mobile 3" />
+    <h3>Redmi Note 13 Pro</h3>
+    <p>6GB RAM | 128GB Storage</p>
+    <p>₹18,499</p>
+    <a class="btn" href="product-details.html?id=3">View Details</a>
+  </div>
+
+  <div class="card">
+    <img src="img/mobile4.jpg" alt="Mobile 4" />
+    <h3>Realme Narzo 70</h3>
+    <p>8GB RAM | 256GB Storage</p>
+    <p>₹16,999</p>
+    <a class="btn" href="product-details.html?id=4">View Details</a>
+  </div>
+
+</div>
+
+</body>
+</html>
