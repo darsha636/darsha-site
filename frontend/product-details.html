@@ -73,11 +73,10 @@ async function loadProductDetails() {
     document.getElementById("productDetails").innerHTML = "<p>Product not found.</p>";
     return;
   }
+const all = products;
 
-  const res = await fetch("http://localhost:9090/products");
-  const all = await res.json();
-
-  currentProduct = all.find(p => p.id == id);
+currentProduct = all.find(p => p.id === Number(id));
+  
 
   if (!currentProduct) {
     document.getElementById("productDetails").innerHTML = "<p>Product not found.</p>";

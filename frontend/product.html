@@ -39,8 +39,7 @@ async function loadProductDetails() {
   }
 
   // 2️⃣ Fetch all products
-  const res = await fetch("http://localhost:9090/products");
-  const allProducts = await res.json();
+  const allProducts = products;
 
   // 3️⃣ Find product by id
   const product = allProducts.find(p => p.id == id);
