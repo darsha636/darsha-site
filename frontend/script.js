@@ -1,22 +1,91 @@
-let products = [];
-window.allProducts = [];
-
-// ---------------- LOAD PRODUCTS ----------------
-async function loadProducts() {
-  try {
-    const res = await fetch("http://localhost:9090/products");
-    const data = await res.json();
-
-    products = data;
-    window.allProducts = data;
-
-    displayProducts(data);
-  } catch (err) {
-    console.log("Error loading products:", err);
+// ================= PRODUCTS (FROM BACKEND REMOVED) =================
+let products = [
+  {
+    id: 1,
+    name: "Wireless Earbuds",
+    price: 1499,
+    image: "images/earbuds.jpg",
+    description: "High-quality wireless earbuds with deep bass and long battery life.",
+    reviews: [
+      { user: "Darsha", rating: 5, comment: "Amazing sound quality!" },
+      { user: "prisha", rating: 4, comment: "Good product for this price." }
+    ]
+  },
+  {
+    id: 2,
+    name: "Smart Watch",
+    price: 2499,
+    image: "images/watch.jpg",
+    description: "Smart fitness watch with heart-rate monitoring and 7-day battery life.",
+    reviews: [
+      { user: "Priya", rating: 3, comment: "Very stylish and smooth!" },
+      { user: "anshu", rating: 4, comment: "Good features." }
+    ]
+  },
+  {
+    id: 3,
+    name: "Bluetooth Speaker",
+    price: 999,
+    image: "images/speaker.jpg",
+    description: "Portable Bluetooth speaker with loud sound and deep bass.",
+    reviews: [
+      { user: "Sneha", rating: 5, comment: "Great for parties!" }
+    ]
+  },
+  {
+    id: 4,
+    name: "Power Bank",
+    price: 1299,
+    image: "images/powerbank.jpg",
+    description: "10,000mAh fast-charging power bank for all devices.",
+    reviews: [
+      { user: "nirav", rating: 4, comment: "Charges fast." }
+    ]
+  },
+  {
+    id: 5,
+    name: "Neckband",
+    price: 699,
+    image: "images/neckband.jpg",
+    description: "Lightweight neckband with powerful bass and noise isolation.",
+    reviews: [
+      { user: "nanni", rating: 5, comment: "Very comfortable!" }
+    ]
+  },
+  {
+    id: 6,
+    name: "Smartphone Case",
+    price: 599,
+    image: "images/case.jpg",
+    description: "Strong shockproof smartphone case with modern design.",
+    reviews: []
+  },
+  {
+    id: 7,
+    name: "Portable Charger",
+    price: 1799,
+    image: "images/charger.jpg",
+    description: "Ultra-fast 22.5W portable charger for all smartphones.",
+    reviews: [
+      { user: "monika", rating: 5, comment: "Very good for travel." }
+    ]
+  },
+  {
+    id: 8,
+    name: "Wireless Mouse",
+    price: 899,
+    image: "images/mouse.jpg",
+    description: "Smooth, ergonomic wireless mouse with 2-year battery life.",
+    reviews: [
+      { user: "Amit", rating: 4, comment: "Works perfectly." }
+    ]
   }
-}
+];
 
-// ---------------- DISPLAY PRODUCTS ----------------
+window.allProducts = products;
+
+
+// ================= DISPLAY PRODUCTS =================
 function displayProducts(list) {
   const container = document.getElementById("productList");
   if (!container) return;
@@ -24,44 +93,46 @@ function displayProducts(list) {
   container.innerHTML = list
     .map(
       (p) => `
-    <div class="card" style="cursor:pointer" onclick="openDetails(${p.id})">
-      <img class="product-img" src="${p.image}" alt="${p.name}" />
-      <h3>${p.name}</h3>
-      <div class="small-text">₹${p.price}</div>
-    </div>
-  `
+      <div class="card" style="cursor:pointer" onclick="openDetails(${p.id})">
+        <img class="product-img" src="${p.image}" alt="${p.name}" />
+        <h3>${p.name}</h3>
+        <div class="small-text">₹${p.price}</div>
+      </div>
+    `
     )
     .join("");
 }
 
-// ---------------- OPEN PRODUCT DETAILS ----------------
+
+// ================= OPEN DETAILS PAGE =================
 function openDetails(id) {
   window.location.href = "product-details.html?id=" + id;
 }
 
-// ---------------- SEARCH ----------------
+
+// ================= LOAD PRODUCTS =================
+function loadProducts() {
+    console.log(products);
+    displayProducts(products);
+}
+
+// ================= SEARCH PRODUCTS =================
 function searchProducts() {
   const box = document.querySelector(".search-box");
-  if (!box) {
-    console.error("Search box not found");
-    return;
-  }
+  if (!box) return;
 
   const query = box.value.trim().toLowerCase();
 
-  // if empty -> show all products again
   if (query === "") {
     displayProducts(products);
     return;
   }
 
-  // filter products array
   const filtered = products.filter(p =>
-    p.name && p.name.toLowerCase().includes(query)
+    p.name.toLowerCase().includes(query)
   );
 
   const productList = document.getElementById("productList");
-
   if (!productList) return;
 
   if (filtered.length === 0) {
@@ -76,7 +147,7 @@ function searchProducts() {
 }
 
 
-// ---------------- CART HELPERS ----------------
+// ================= CART FUNCTIONS =================
 function getCart() {
   return JSON.parse(localStorage.getItem("cart") || "[]");
 }
@@ -98,7 +169,8 @@ function addToCart(product) {
   alert("Added to cart!");
 }
 
-// ---------------- CART PAGE RENDER ----------------
+
+// ================= CART PAGE =================
 function renderCartPage() {
   const cartArea = document.getElementById("cartItemsArea");
   const totalEl = document.getElementById("totalAmount");
@@ -146,7 +218,8 @@ function renderCartPage() {
       : `<small>Add ₹${5000 - total} more for loan eligibility.</small>`;
 }
 
-// ---------------- REMOVE FROM CART ----------------
+
+// ================= REMOVE CART ITEM =================
 function removeFromCart(index) {
   const cart = getCart();
   cart.splice(index, 1);
@@ -155,26 +228,19 @@ function removeFromCart(index) {
   updateCartCount();
 }
 
-// ---------------- LOAN ----------------
+
+// ================= LOAN PAGE =================
 function goToLoan(amount) {
   localStorage.setItem("loanAmount", amount);
   window.location.href = "loan.html";
 }
 
-// ---------------- PAGE LOAD ----------------
-window.addEventListener("load", () => {
-  updateCartCount();
 
-  if (document.getElementById("productList")) loadProducts();
-  if (document.getElementById("cartItemsArea")) renderCartPage();
-});
-
-// ---------------- BACK BUTTON ----------------
+// ================= OTHER NAVIGATION =================
 function goBack() {
   window.location.href = "index.html";
 }
 
-// ---------------- CHECKOUT ----------------
 function goToAddress() {
   const cart = getCart();
   if (cart.length === 0) {
@@ -184,13 +250,24 @@ function goToAddress() {
   window.location.href = "address.html";
 }
 
+
+// ================= USER DISPLAY =================
 function showUser() {
   const user = JSON.parse(localStorage.getItem("user"));
   const logged = localStorage.getItem("loggedIn");
 
   if (user && logged === "yes") {
-    document.getElementById("usernameArea").innerText = "Hi, " + user.name;
+    const el = document.getElementById("usernameArea");
+    if (el) el.innerText = "Hi, " + user.name;
   }
 }
 
-window.onload = showUser;
+
+// ================= PAGE LOAD =================
+window.addEventListener("load", () => {
+  updateCartCount();
+  showUser();
+
+  if (document.getElementById("productList")) loadProducts();
+  if (document.getElementById("cartItemsArea")) renderCartPage();
+});

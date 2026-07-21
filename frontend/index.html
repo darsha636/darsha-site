@@ -170,20 +170,7 @@ function showError(error) {
 // Auto run on page load
 getLocation();
 // ================= SEARCH WORKING 100% =================
-function searchProducts() {
-    let query = document.querySelector(".search-box").value.toLowerCase();
 
-    if (query.trim() === "") {
-        renderProducts(products); // show all products again
-        return;
-    }
-
-    let filtered = products.filter(p =>
-        p.name.toLowerCase().includes(query)
-    );
-
-    renderProducts(filtered);
-}
 
 // ================= ENTER SEARCH =================
 document.querySelector(".search-box").addEventListener("keyup", function(e) {
